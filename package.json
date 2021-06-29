@@ -1,7 +1,7 @@
 {
   "name": "@alsadi/simple_http_server",
   "version": "0.0.1",
-  "description": "just a test project",
+  "description": "Simple HTTP server",
   "exports": {
     ".": "./index.js",
     "./lib": "./lib"
@@ -19,7 +19,7 @@
     "dev": "rollup -c -w"
   },
   "dependencies": {},
-  "private": true,
+  "private": false,
   "author": "alsadi@gmail.com",
   "license": "Apache-2.0",
   "devDependencies": {
