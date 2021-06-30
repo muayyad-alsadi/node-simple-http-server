@@ -121,6 +121,7 @@ export class SimpleHttpServer {
     async handle_static(request, response) {
         const uri = request.url.replace(leading_slash_regex, "");
         const parts = uri.split("/").filter((i)=>i);
+        request.uri_parts = parts;
         if (!parts.length) return false;
         if (this.prefixes.has(parts[0])) {
             await send_file(response, uri, this.static_dir).catch(console.log);
