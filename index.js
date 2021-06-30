@@ -14,8 +14,12 @@ export class HttpCodedError extends CodedError {
 
 
 export class PageNotFound extends HttpCodedError {
-    constructor(uri) {
-        super("not-found", `Page Not Found [${uri}]`, 404);
+    constructor() {
+        super("not-found", "Page Not Found", 404);
+        const uri = this.request?this.request.url:null;
+        if (uri) {
+            self.message = `Page Not Found [${uri}]`;
+        }
     }
 }
 
@@ -146,6 +150,8 @@ export class SimpleHttpServer {
         try {
             await self.handle_one(request, response);
         } catch (e) {
+            e.request = request;
+            e.response = response;
             self.send_exception(response, e);
         }
     }
