@@ -25,10 +25,10 @@ export class PageNotFound extends HttpCodedError {
     }
 
     /**
-     * finialize is called before formating.
+     * finalize is called before formating.
      * used to set uri because when constructed uri is not yet set.
      */
-    finialize() {
+     finalize() {
         const uri = this.request?this.request.url:null;
         if (uri) {
             self.message = `Page Not Found [${uri}]`;
@@ -74,8 +74,8 @@ export class SimpleHttpServer {
      * @returns 
      */
     format_error(error) {
-        if (typeof error.finialize=="function") {
-            error.finialize();
+        if (typeof error.finalize=="function") {
+            error.finalize();
         }
         const code = error.code || error.constructor.name
         const message = error.message;
