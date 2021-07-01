@@ -31,7 +31,7 @@ export class PageNotFound extends HttpCodedError {
      finalize() {
         const uri = this.request?this.request.url:null;
         if (uri) {
-            self.message = `Page Not Found [${uri}]`;
+            this.message = `Page Not Found [${uri}]`;
         }
 
     }
@@ -74,9 +74,6 @@ export class SimpleHttpServer {
      * @returns 
      */
     format_error(error) {
-        if (typeof error.finalize=="function") {
-            error.finalize();
-        }
         const code = error.code || error.constructor.name
         const message = error.message;
         const trace = (process.env["NODE_ENV"]!="production")?error.stack:null;
@@ -99,6 +96,9 @@ export class SimpleHttpServer {
         }
         if (error instanceof Redirect || (error.location && (http_code==301 || http_code==302))) {
             return this.redirect(response, error.location, http_code);
+        }
+        if (typeof error.finalize=="function") {
+            error.finalize();
         }
         const {mime_type, body} = this.format_error(error);
         response.writeHead(http_code || 500, {"Content-Type": mime_type});
