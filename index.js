@@ -10,17 +10,32 @@ export class HttpCodedError extends CodedError {
         super(code, msg);
         this.http_code = http_code;
     }
+
+    /**
+     * finialize is called before formating
+     */
+    finialize() {
+    }
 }
 
 
 export class PageNotFound extends HttpCodedError {
     constructor() {
         super("not-found", "Page Not Found", 404);
+    }
+
+    /**
+     * finialize is called before formating.
+     * used to set uri because when constructed uri is not yet set.
+     */
+    finialize() {
         const uri = this.request?this.request.url:null;
         if (uri) {
             self.message = `Page Not Found [${uri}]`;
         }
+
     }
+
 }
 
 export class Redirect extends HttpCodedError {
@@ -59,6 +74,9 @@ export class SimpleHttpServer {
      * @returns 
      */
     format_error(error) {
+        if (typeof error.finialize=="function") {
+            error.finialize();
+        }
         const code = error.code || error.constructor.name
         const message = error.message;
         const trace = (process.env["NODE_ENV"]!="production")?error.stack:null;
